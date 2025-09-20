@@ -1,7 +1,12 @@
 fastapi
-uvicorn[standard]
+uvicorn
+chromadb
+jq
 langchain
+langchain-chroma
 langchain-community
 langchain-core
 langchain-ollama
+langchain-text-splitters
 pydantic-settings
+tqdm
