@@ -1,7 +1,7 @@
-from fastapi import FastAPI
+from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 
-from .schemas import ChatRequest, MealSuggestionResponse
+from .schemas import ChatRequest
 from .services import chain
 
 app = FastAPI(
@@ -10,24 +10,23 @@ app = FastAPI(
     version="1.0.0"
 )
 
-origins = [
-    "http://localhost:3000",  # The origin of your Next.js app
-]
-
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=origins,
+    allow_origins=["*"],  # Allows all origins
     allow_credentials=True,
     allow_methods=["*"],  # Allows all methods (GET, POST, etc.)
     allow_headers=["*"],  # Allows all headers
 )
 
 
-@app.post("/chat", response_model=MealSuggestionResponse)
+@app.post("/chat")
 async def chat(request: ChatRequest):
-    print(f"Received message: {request.message}")
-    response = chain.invoke({"message": request.message})
-    return response
+    try:
+        config = {"configurable": {"session_id": request.session_id}}
+        response_string = await chain.ainvoke({"message": request.message}, config=config)
+        return {"response": response_string}
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
 
 
 @app.get("/")
