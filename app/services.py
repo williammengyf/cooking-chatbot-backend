@@ -27,8 +27,7 @@ def get_session_history(session_id: str) -> ChatMessageHistory:
     return store[session_id]
 
 
-base_model = OllamaLLM(model=settings.base_llm_model)
-finetuned_model = OllamaLLM(model=settings.finetuned_llm_model)
+model = OllamaLLM(model=settings.finetuned_llm_model)
 
 
 def _remove_think_tags(text: str) -> str:
@@ -85,29 +84,25 @@ def log_and_pass(data, label=""):
     return data
 
 
-# 1. Define the RAG path: uses the fine-tuned model
 rag_chain = (
     rag_prompt
-    | finetuned_model
+    | model
     | StrOutputParser()
     | RunnableLambda(_remove_think_tags)
 )
 
-# 2. Define the General path: uses the powerful base model
 general_chain = (
     general_prompt
-    | base_model
+    | model
     | StrOutputParser()
     | RunnableLambda(_remove_think_tags)
 )
 
-# 3. Build the branching logic
 branch = RunnableBranch(
     (lambda x: x["context"], rag_chain),
     general_chain,
 )
 
-# 4. Construct the full chain
 base_chain = (
     RunnablePassthrough.assign(
         context=itemgetter("message") | retriever

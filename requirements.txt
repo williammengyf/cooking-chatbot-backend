@@ -10,3 +10,7 @@ langchain-ollama
 langchain-text-splitters
 pydantic-settings
 tqdm
+transformers
+peft
+torch
+accelerate
