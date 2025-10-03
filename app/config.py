@@ -7,7 +7,6 @@ class Settings(BaseSettings):
         env_file_encoding="utf-8",
     )
 
-    base_llm_model: str = "qwen2-7b-instruct"
     finetuned_llm_model: str = "recipebot"
 
 

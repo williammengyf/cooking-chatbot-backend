@@ -1,5 +1,6 @@
 # Modelfile.recipebot
-FROM ../pretrained/FractureSSR/RecipeBot
+FROM ./merged_recipebot_model
+
 TEMPLATE """{{- if .System }}<|im_start|>system
 {{ .System }}<|im_end|>
 {{- end }}
@@ -7,3 +8,4 @@ TEMPLATE """{{- if .System }}<|im_start|>system
 {{ .Prompt }}<|im_end|>
 <|im_start|>assistant
 """
+
