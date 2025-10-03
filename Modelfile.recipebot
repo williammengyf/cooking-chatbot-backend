@@ -1,0 +1,9 @@
+# Modelfile.recipebot
+FROM ../pretrained/FractureSSR/RecipeBot
+TEMPLATE """{{- if .System }}<|im_start|>system
+{{ .System }}<|im_end|>
+{{- end }}
+<|im_start|>user
+{{ .Prompt }}<|im_end|>
+<|im_start|>assistant
+"""
