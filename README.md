@@ -22,29 +22,29 @@ git clone https://github.com/williammengyf/cooking-chatbot-backend.git
 cd cooking-chatbot-backend
 ```
 
-
-### Create the virtual environment
-
-```
-python -m venv venv
-```
-
-```
-source venv/bin/activate
-```
-
-
 ### Install Dependencies
 
 ```
 pip install -r requirements.txt
 ```
 
-### Set Up Ollama
-Once Ollama is installed and running, pull a model for the chatbot to use.
+### Pull Model
 
 ```
-ollama pull qwen3
+pip install modelscope
+modelscope download --model 'FractureSSR/RecipeBot' --local_dir 'pretrained/FractureSSR/RecipeBot'
+```
+
+### Install and Set Up Ollama
+
+```
+curl -fsSL https://ollama.com/install.sh
+ollama serve
+```
+
+### Run Models on Ollama
+```
+ollama create recipebot -f Modelfile
 ollama pull nomic-embed-text
 ```
 
@@ -54,7 +54,7 @@ Create a file named .env in the root of the project directory. This file will st
 
 ```
 # .env
-LLM_MODEL="qwen3"
+FINETUNED_LLM_MODEL="recipebot"
 ```
 
 ### Create the Vector Store (One Time Setup)
