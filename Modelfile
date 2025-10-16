@@ -1,7 +1,6 @@
-# This command tells Ollama to use your local GGUF file as the base model
-FROM ./pretrained/FractureSSR//RecipeBot/gguf
+# Modelfile
+FROM ./pretrained/FractureSSR/RecipeBot/gguf
 
-# This sets the chat template for the model
 TEMPLATE """{{- if .System }}<|im_start|>system
 {{ .System }}<|im_end|>
 {{- end }}
