@@ -1,3 +1,4 @@
+import os
 import re
 from operator import itemgetter
 from langchain_core.prompts import ChatPromptTemplate, MessagesPlaceholder
@@ -13,9 +14,14 @@ from .config import settings
 
 CHROMA_DB_PATH = "./chroma_db"
 EMBEDDING_MODEL_NAME = "nomic-embed-text"
-embeddings = OllamaEmbeddings(model=EMBEDDING_MODEL_NAME)
-vectorstore = Chroma(persist_directory=CHROMA_DB_PATH, embedding_function=embeddings)
-retriever = vectorstore.as_retriever()
+
+retriever = None
+if os.path.exists(CHROMA_DB_PATH):
+    embeddings = OllamaEmbeddings(model=EMBEDDING_MODEL_NAME)
+    vectorstore = Chroma(persist_directory=CHROMA_DB_PATH, embedding_function=embeddings)
+    retriever = vectorstore.as_retriever()
+else:
+    retriever = RunnableLambda(lambda x: [])
 
 
 store = {}
